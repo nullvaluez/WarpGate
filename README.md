@@ -17,8 +17,8 @@ Warpgate is an application that creates a Cloudflare WARP tunnel to toggle DNS s
 ## Clone the Repository
 
 ```bash
-git clone https://github.com/yourusername/warpify.git
-cd warpify
+git clone https://github.com/nullvaluez/warpgate.git
+cd warpgate
 ```
 ## Install Dependencies
 ```bash
