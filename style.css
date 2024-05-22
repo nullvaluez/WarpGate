@@ -62,3 +62,14 @@ body {
     transform: translateX(26px);
   }
   
+  .status {
+    margin-top: 20px;
+    font-size: 1.2em;
+  }
+  
+  .connection-status {
+    margin-top: 10px;
+    font-size: 1em;
+    color: #ffa500;
+  }
+  

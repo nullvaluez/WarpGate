@@ -6,7 +6,7 @@ let defaultDNS = '';
 
 function createWindow() {
   const win = new BrowserWindow({
-    width: 1000,
+    width: 800,
     height: 600,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
@@ -139,5 +139,11 @@ ipcMain.on('toggle-dns', (event, arg) => {
         event.reply('dns-change-response', 'success');
       });
     });
+  });
+});
+
+ipcMain.handle('get-current-dns', async () => {
+  return new Promise((resolve) => {
+    getCurrentDNS(resolve);
   });
 });
