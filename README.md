@@ -1,10 +1,8 @@
 # Warpgate
-![WarpGate](https://github.com/nullvaluez/warpgate/blob/main/assets/images/ss.png)
-
 Warpgate is an application that creates a Cloudflare WARP tunnel to toggle DNS settings for your network interface. This app is built using Electron and leverages sudo privileges to manage DNS configurations.
 
 ## Features
-
+![WarpGate](https://github.com/nullvaluez/warpgate/blob/main/assets/images/ss.png)
 - Toggle DNS settings between the system default and Cloudflare's 1.1.1.1 protocol.
 - Cross-platform support for Windows and macOS.
 
