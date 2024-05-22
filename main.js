@@ -1,20 +1,30 @@
-const { app, BrowserWindow, ipcMain } = require('electron');
+const { app, BrowserWindow, ipcMain, Menu } = require('electron');
 const sudo = require('sudo-prompt');
 const path = require('path');
+const NetworkSpeed = require('network-speed'); // Import the network-speed package
 
 let defaultDNS = '';
 
 function createWindow() {
   const win = new BrowserWindow({
-    width: 800,
+    width: 1000,
     height: 600,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       contextIsolation: true,
+      devTools: false // Disable devTools
     },
   });
 
   win.loadFile('index.html');
+
+  // Remove the menu
+  win.setMenu(null);
+
+  // Disable context menu
+  win.webContents.on('context-menu', (e) => {
+    e.preventDefault();
+  });
 }
 
 app.whenReady().then(() => {
@@ -72,6 +82,40 @@ function getCurrentDNS(callback) {
       console.log(`Current DNS: ${dns}`);
       callback(dns);
     });
+  }
+}
+
+async function getNetworkDownloadSpeed() {
+  try {
+    const testNetworkSpeed = new NetworkSpeed();
+    const baseUrl = 'http://eu.httpbin.org/stream-bytes/500000';
+    const fileSizeInBytes = 500000;
+    const speed = await testNetworkSpeed.checkDownloadSpeed(baseUrl, fileSizeInBytes);
+    return speed;
+  } catch (error) {
+    console.error('Error measuring download speed:', error.message);
+    return { mbps: 0 };
+  }
+}
+
+async function getNetworkUploadSpeed() {
+  try {
+    const testNetworkSpeed = new NetworkSpeed();
+    const options = {
+      hostname: 'www.google.com',
+      port: 80,
+      path: '/catchers/544b09b4599c1d0200000289',
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+    const fileSizeInBytes = 2000000;
+    const speed = await testNetworkSpeed.checkUploadSpeed(options, fileSizeInBytes);
+    return speed;
+  } catch (error) {
+    console.error('Error measuring upload speed:', error.message);
+    return { mbps: 0 };
   }
 }
 
@@ -146,4 +190,10 @@ ipcMain.handle('get-current-dns', async () => {
   return new Promise((resolve) => {
     getCurrentDNS(resolve);
   });
+});
+
+ipcMain.handle('get-network-speed', async () => {
+  const downloadSpeed = await getNetworkDownloadSpeed();
+  const uploadSpeed = await getNetworkUploadSpeed();
+  return { download: downloadSpeed, upload: uploadSpeed };
 });

@@ -1,12 +1,13 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #151515;
+    background-color: #1a1a1a;
     color: white;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
     margin: 0;
+    position: relative; /* Ensure body is a positioned element */
   }
   
   .container {
@@ -71,5 +72,25 @@ body {
     margin-top: 10px;
     font-size: 1em;
     color: #ff4141;
+  }
+  
+  .speed {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+  }
+  
+  .speed div {
+    margin-bottom: 5px; /* Adjust spacing between lines as needed */
+  }
+  
+  .version {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    font-size: 0.9em;
+    color: #ccc;
   }
   
