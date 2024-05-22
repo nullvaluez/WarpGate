@@ -1,6 +1,6 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #282c34;
+    background-color: #151515;
     color: white;
     display: flex;
     justify-content: center;
@@ -13,7 +13,7 @@ body {
     text-align: center;
   }
   
-  h1 {
+  .logo {
     margin-bottom: 20px;
   }
   
@@ -55,7 +55,7 @@ body {
   }
   
   input:checked + .slider {
-    background-color: #2196F3;
+    background-color: #ff4141;
   }
   
   input:checked + .slider:before {
@@ -70,6 +70,6 @@ body {
   .connection-status {
     margin-top: 10px;
     font-size: 1em;
-    color: #ffa500;
+    color: #ff4141;
   }
   
