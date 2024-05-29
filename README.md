@@ -47,11 +47,15 @@ Applies ASARMOR patch prior to output build.
 Encrypts the bundled .asar file after the build has been completed 
 *FILE MUST BE IN "DIST" FOLDER, AKA OUTPUT FOLDER FROM ELECTRON-BUILDER*
 
+## Apply ASARMOR
+To apply ASARMOR to the final distribution build, ensure afterPack.js and beforePack.js are located in /dist. If the dist folder has not yet been created, manually create the folder. 
+
 ## Package the Application
 To package the application for distribution, use Electron Packager or Electron Builder. For example, using Electron Builder:
 ```bash
 npm run dist
 ```
+The application will now run the build process as well as apply protections to the .asar file.
 
 ## License
 This project is licensed under the MIT License - see the LICENSE file for details.
