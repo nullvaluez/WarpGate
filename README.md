@@ -39,6 +39,14 @@ Listens for DOM content to load and sets up event listeners for the DNS toggle s
 3.) Main Script (main.js):
 Creates the main application window and sets up IPC handlers to manage DNS settings using sudo commands.
 
+4.) Pre-Pack Script (beforePack.js)
+Applies ASARMOR patch prior to output build. 
+*FILE MUST BE IN "DIST" FOLDER, AKA OUTPUT FOLDER FROM ELECTRON-BUILDER*
+
+5.) Post-Pack Script (afterPack.js)
+Encrypts the bundled .asar file after the build has been completed 
+*FILE MUST BE IN "DIST" FOLDER, AKA OUTPUT FOLDER FROM ELECTRON-BUILDER*
+
 ## Package the Application
 To package the application for distribution, use Electron Packager or Electron Builder. For example, using Electron Builder:
 ```bash
