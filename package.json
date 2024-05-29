@@ -26,14 +26,19 @@
       "main.js",
       "preload.js",
       "index.html",
-      "package.json"
-    ]
+      "package.json",
+      "script.js"
+    ],
+    "beforePack": "./dist/beforePack.js",
+    "afterPack": "./dist/afterPack.js"
   },
   "devDependencies": {
     "electron": "^13.1.7",
     "electron-builder": "^22.11.7"
   },
   "dependencies": {
+    "asarmor": "^3.0.0",
+    "network-speed": "^2.1.1",
     "sudo-prompt": "^9.2.1"
   }
 }

@@ -1,29 +1,78 @@
-const { app, BrowserWindow, ipcMain, Menu } = require('electron');
+const { app, BrowserWindow, ipcMain, Menu, Tray } = require('electron');
 const sudo = require('sudo-prompt');
 const path = require('path');
-const NetworkSpeed = require('network-speed'); // Import the network-speed package
+const NetworkSpeed = require('network-speed'); 
+const asarmor = require('asarmor');
+const { join } = require('path');
 
 let defaultDNS = '';
+let tray = null;
+let mainWindow = null;
 
 function createWindow() {
-  const win = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     width: 1000,
     height: 600,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
-      contextIsolation: true,
+      nodeIntegration: true,
+      contextIsolation: false,
       devTools: false // Disable devTools
     },
   });
 
-  win.loadFile('index.html');
+  mainWindow.loadFile('index.html');
 
   // Remove the menu
-  win.setMenu(null);
+  mainWindow.setMenu(null);
 
   // Disable context menu
-  win.webContents.on('context-menu', (e) => {
+  mainWindow.webContents.on('context-menu', (e) => {
     e.preventDefault();
+  });
+
+  // Minimize to tray
+  mainWindow.on('minimize', (event) => {
+    event.preventDefault();
+    mainWindow.hide();
+    createTray();
+  });
+
+  mainWindow.on('restore', () => {
+    mainWindow.show();
+    if (tray) tray.destroy();
+  });
+}
+
+function createTray() {
+  // Create a new Tray instance without specifying a custom icon
+  tray = new Tray(app.getAppPath() + '/default-icon.png');
+  
+  const contextMenu = Menu.buildFromTemplate([
+    {
+      label: 'Restore',
+      click: () => {
+        mainWindow.show();
+      }
+    },
+    {
+      label: 'Exit',
+      click: () => {
+        app.isQuiting = true;
+        app.quit();
+      }
+    }
+  ]);
+
+  tray.setToolTip('WarpGate');
+  tray.setContextMenu(contextMenu);
+
+  tray.on('click', () => {
+    if (mainWindow.isVisible()) {
+      mainWindow.hide();
+    } else {
+      mainWindow.show();
+    }
   });
 }
 
@@ -197,3 +246,15 @@ ipcMain.handle('get-network-speed', async () => {
   const uploadSpeed = await getNetworkUploadSpeed();
   return { download: downloadSpeed, upload: uploadSpeed };
 });
+
+exports.default = async ({ appOutDir, packager }) => {
+  try {
+    const asarPath = join(packager.getResourcesDir(appOutDir), 'app.asar');
+    console.log(`asarmor applying patches to ${asarPath}`);
+    const archive = await asarmor.open(asarPath);
+    archive.patch(); // apply default patches
+    await archive.write(asarPath);
+  } catch (err) {
+    console.error(err);
+  }
+};
